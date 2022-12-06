@@ -4,42 +4,28 @@ fun main() {
     check(day5(testInput) == "CMZ")
 
     val input = readInput("Day05")
-    println(day5(input))
-    println(day5(input, shouldReverse = false))
+
+    // Part 1
+    check(day5(input) == "LJSVLTWQM")
+
+    // Part 2
+    check(day5(input, shouldReverse = false) == "BRQWDBBJM")
 }
 
 private fun day5(input: List<String>, shouldReverse: Boolean = true): String {
-    val lineIterator = input.iterator()
 
-    var line = lineIterator.next()
-    val lineLength = line.length
+    val lineLength = input.first().length
 
-    // when there's just 1 column, line length will be 4 chars or fewer,
+    // when only 1 stack given, line length will be 4 chars or fewer,
     // just return the first crane at the top.
     if (lineLength <= 4) {
-        return line.secondChar().toString()
+        return input.first()[1].toString()
     }
 
-    // Init an empty table of empty stacks,
-    //  first find number of columns n, knowing each line length is 4n-1 chars
-    val numColumns = (line.length + 1) / 4
-    val table = MutableList(numColumns) { listOf<Char>() }
+    val lineIterator = input.iterator()
+    val table = readInitialTable(lineIterator)
 
-    // populate table with initial setup for each stack,
-    //  the last line has a number for each column,
-    //  we stop reading input when we find that line with a digit at the front.
-    while (!line.secondChar().isDigit()) {
-        var i = 0
-        line.chunked(4).forEach {
-            if (it.secondChar().isLetter()) {
-                table[i] = table[i] + it.secondChar()
-            }
-            i++
-        }
-        line = lineIterator.next()
-    }
-
-    // next we have an empty line, we just discard it
+    // next we have an empty line, just discard it
     lineIterator.next()
 
     // the following lines contain each a crane movement instruction,
@@ -56,7 +42,26 @@ private fun day5(input: List<String>, shouldReverse: Boolean = true): String {
     }.joinToString("")
 }
 
-private fun String.secondChar() = this[1]
+private fun readInitialTable(
+    lineIterator: Iterator<String>
+): MutableList<List<Char>> {
+    var line = lineIterator.next()
+    val numColumns = (line.length + 1) / 4
+    val table = MutableList(numColumns) { listOf<Char>() }
+
+    while (!line[1].isDigit()) {
+        var i = 0
+        line.chunked(4).forEach {
+            if (it[1].isLetter()) {
+                table[i] = table[i] + it[1]
+            }
+            i++
+        }
+        line = lineIterator.next()
+    }
+
+    return table
+}
 
 private fun readInstruction(instruction: String) =
     instruction.split(" ")
