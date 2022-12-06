@@ -1,7 +1,7 @@
 fun main() {
     // test if implementation meets criteria from the description sample:
     val testInput = readInput("Day05_test")
-    println(day5(testInput))
+    check(day5(testInput) == "CMZ")
 
     val input = readInput("Day05")
     println(day5(input))
