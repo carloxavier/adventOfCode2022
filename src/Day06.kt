@@ -6,7 +6,11 @@ fun main() {
     check(day6("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw") == 11)
 
 
-    println(day6(readInput("Day06").first(), checkLength = 14))
+    // first part
+    check(day6(readInput("Day06").first()) == 1093)
+
+    // second part
+    check(day6(readInput("Day06").first(), checkLength = 14) == 3534)
 }
 
 fun day6(input: String, checkLength: Int = 4) =
